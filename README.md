@@ -1,28 +1,82 @@
-# 📊 Analytics Masterpiece - PM Tolandona
+# 🍽️ Database MBG & Relawan Tolandona
 
-Sistem Dashboard Analitik modern yang dirancang untuk memonitoring data distribusi dan demografi secara real-time. Proyek ini mengintegrasikan **Google Sheets** sebagai database dengan antarmuka web yang interaktif dan *colorful*.
+Aplikasi web fullstack berbasis **Google Apps Script** dan **Google Sheets** untuk mengelola database **penerima manfaat MBG** serta **data relawan**. Proyek ini menyediakan dashboard analitik, formulir input, tabel pencarian, dan operasi CRUD langsung ke spreadsheet.
 
-## 🚀 Fitur Utama
-- **Multi-Database Support**: Memisahkan dan menampilkan data dari tiga kategori utama: **Siswa**, **Guru**, dan **Posyandu**.
-- **Full Colour Dashboard**: Tampilan kartu statistik yang cerah untuk memudahkan pembacaan data (Total, Laki-laki, Perempuan).
-- **Glassmorphism Table**: Tabel data transparan dengan efek kaca yang modern dan responsif.
-- **Real-Time Integration**: Data diambil langsung dari Google Sheets menggunakan Google Apps Script (GAS) melalui logika *server-side*.
+## ✨ Fitur Utama
 
-## 🛠️ Teknologi yang Digunakan
-- **Frontend**: HTML5, CSS3 (Custom Glassmorphism), Bootstrap 5.
-- **Charts & Logic**: Google Apps Script (GAS), JavaScript (Client-side).
-- **Database**: Google Sheets API.
+- **Dashboard ringkas** untuk melihat total penerima manfaat, total relawan, penerima aktif, dan relawan aktif.
+- **Database Penerima Manfaat MBG** dengan kolom identitas, kategori penerima, jenis kelamin, usia, alamat/dusun, instansi, status MBG, dan catatan.
+- **Database Relawan** dengan kolom identitas, nomor HP, jenis kelamin, peran, wilayah tugas, status, dan catatan.
+- **CRUD fullstack**: tambah, edit, hapus, dan muat ulang data dari Google Sheets melalui backend Apps Script.
+- **Pencarian cepat** pada tabel penerima dan relawan.
+- **Grafik komposisi** penerima berdasarkan kategori dan relawan berdasarkan peran menggunakan Chart.js.
+- **Auto setup database**: sheet `Penerima MBG` dan `Relawan` dibuat otomatis beserta header jika belum tersedia.
+- **Mode pratinjau lokal**: `Index.html` tetap dapat dibuka di browser untuk melihat contoh tampilan, lalu otomatis memakai database live saat dijalankan sebagai Web App Apps Script.
+
+## 🛠️ Teknologi
+
+- **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript, Chart.js.
+- **Backend**: Google Apps Script.
+- **Database**: Google Sheets.
 
 ## 📂 Struktur File
-- `Code.gs`: Logika backend untuk pemrosesan data, filtering kategori, dan perhitungan statistik gender secara otomatis.
-- `Index.html`: Struktur antarmuka pengguna, gaya visual, dan jembatan komunikasi antara UI dan server.
 
-## 📝 Cara Penggunaan
-1. Pastikan Anda memiliki Google Sheets dengan sheet bernama: `Siswa`, `Guru`, dan `Posyandu`.
-2. Buka editor Google Apps Script.
-3. Salin kode dari `Code.gs` dan `Index.html` ke editor tersebut.
-4. Klik **Deploy** > **New Deployment** > **Web App**.
-5. Salin URL Web App yang dihasilkan untuk mengakses dashboard.
+- `Code.gs` — backend Apps Script untuk inisialisasi sheet, mengambil data, menyimpan data, menghapus data, dan membuat ringkasan dashboard.
+- `Index.html` — antarmuka web responsif untuk dashboard, formulir CRUD, tabel pencarian, grafik, dan integrasi `google.script.run`.
+
+## 🧾 Struktur Database
+
+### Sheet `Penerima MBG`
+
+| Kolom | Keterangan |
+| --- | --- |
+| ID | ID otomatis penerima manfaat. |
+| Nama | Nama lengkap penerima. |
+| NIK/NISN | Nomor identitas penerima. |
+| Kategori | Contoh: Siswa, Santri, Balita, Ibu Hamil, Lansia. |
+| Jenis Kelamin | Laki-laki atau Perempuan. |
+| Usia | Usia penerima. |
+| Alamat/Dusun | Lokasi penerima. |
+| Satuan Pendidikan/Instansi | Sekolah, posyandu, atau instansi terkait. |
+| Status MBG | Aktif, Menunggu Verifikasi, atau Tidak Aktif. |
+| Catatan | Informasi tambahan. |
+| Dibuat Pada | Timestamp otomatis. |
+| Diperbarui Pada | Timestamp otomatis. |
+
+### Sheet `Relawan`
+
+| Kolom | Keterangan |
+| --- | --- |
+| ID | ID otomatis relawan. |
+| Nama | Nama lengkap relawan. |
+| NIK | Nomor identitas relawan. |
+| Nomor HP | Kontak relawan. |
+| Jenis Kelamin | Laki-laki atau Perempuan. |
+| Peran | Contoh: Koordinator, Dapur, Distribusi, Pendataan. |
+| Wilayah Tugas | Area kerja relawan. |
+| Status | Aktif, Siaga, atau Tidak Aktif. |
+| Catatan | Informasi tambahan. |
+| Dibuat Pada | Timestamp otomatis. |
+| Diperbarui Pada | Timestamp otomatis. |
+
+## 🚀 Cara Deploy ke Google Apps Script
+
+1. Buat atau buka Google Sheets yang akan menjadi database.
+2. Pilih **Extensions** > **Apps Script**.
+3. Salin isi `Code.gs` ke file `Code.gs` di Apps Script.
+4. Buat file HTML bernama `Index`, lalu salin isi `Index.html`.
+5. Klik **Deploy** > **New deployment**.
+6. Pilih tipe **Web app**.
+7. Atur akses sesuai kebutuhan, misalnya hanya akun organisasi atau siapa saja yang memiliki link.
+8. Klik **Deploy** dan buka URL Web App yang dihasilkan.
+
+## 🔐 Catatan Operasional
+
+- Pastikan aplikasi dijalankan dari spreadsheet aktif karena backend menggunakan `SpreadsheetApp.getActiveSpreadsheet()`.
+- Jangan mengubah nama sheet `Penerima MBG` dan `Relawan` kecuali juga mengubah konfigurasi di `Code.gs`.
+- Header sheet dibuat otomatis oleh fungsi `initializeDatabase_()` saat web app dibuka atau data dipanggil.
+- Jika data sensitif seperti NIK digunakan, batasi akses deployment hanya kepada petugas yang berwenang.
 
 ---
-*Proyek ini dikembangkan untuk mengoptimalkan manajemen data pendidikan dan kesehatan di wilayah Tolandona.*
+
+Dibuat untuk membantu pendataan MBG dan koordinasi relawan di Tolandona secara lebih rapi, cepat, dan terukur.

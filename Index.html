@@ -1,117 +1,649 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { background: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    
-    /* Gradien Warna */
-    .bg-main { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .bg-male { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
-    .bg-female { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: white; }
+    :root {
+      --forest: #12372a;
+      --leaf: #436850;
+      --mint: #adbc9f;
+      --cream: #fbfada;
+      --sun: #f9b572;
+      --danger: #c0392b;
+      --ink: #17202a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(249, 181, 114, 0.35), transparent 32rem),
+        linear-gradient(135deg, #fbfada 0%, #e9f0df 48%, #dbe8d0 100%);
+      color: var(--ink);
+      font-family: Inter, 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(18, 55, 42, 0.98), rgba(67, 104, 80, 0.92));
+      border-radius: 2rem;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 65%);
+      content: '';
+      height: 18rem;
+      position: absolute;
+      right: -6rem;
+      top: -6rem;
+      width: 18rem;
+    }
+
+    .badge-soft {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    .stat-card, .panel {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 1.35rem;
+      box-shadow: 0 1.2rem 3rem rgba(18, 55, 42, 0.12);
+    }
 
     .stat-card {
-      border: none;
-      border-radius: 20px;
-      transition: 0.3s;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .stat-card:hover { transform: translateY(-10px); }
-
-    /* Glassmorphism Table */
-    .glass-container {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(15px);
-      border-radius: 25px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 25px;
-      margin-top: 30px;
+      min-height: 9rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .table-custom { border-collapse: separate; border-spacing: 0 8px; }
-    .table-custom thead th { background: #764ba2; color: white; border: none; padding: 15px; }
-    .table-custom tbody tr { background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .table-custom td { padding: 15px; border: none; }
-    .first-td { border-radius: 12px 0 0 12px; }
-    .last-td { border-radius: 0 12px 12px 0; }
+    .stat-card:hover {
+      box-shadow: 0 1.4rem 3.4rem rgba(18, 55, 42, 0.18);
+      transform: translateY(-0.25rem);
+    }
+
+    .icon-pill {
+      align-items: center;
+      background: var(--cream);
+      border-radius: 1rem;
+      display: inline-flex;
+      height: 3rem;
+      justify-content: center;
+      width: 3rem;
+    }
+
+    .nav-pills .nav-link {
+      border-radius: 999px;
+      color: var(--forest);
+      font-weight: 700;
+    }
+
+    .nav-pills .nav-link.active {
+      background: var(--forest);
+      box-shadow: 0 0.75rem 1.8rem rgba(18, 55, 42, 0.24);
+    }
+
+    .form-control, .form-select {
+      border-color: #d7dfce;
+      border-radius: 0.85rem;
+      min-height: 2.8rem;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      border-color: var(--forest);
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover, .btn-primary:focus {
+      background: var(--leaf);
+      border-color: var(--leaf);
+    }
+
+    .btn-outline-primary {
+      border-color: var(--forest);
+      border-radius: 999px;
+      color: var(--forest);
+      font-weight: 700;
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--forest);
+      border-color: var(--forest);
+    }
+
+    .table thead th {
+      background: var(--forest);
+      color: #fff;
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .table tbody td {
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      border-radius: 999px;
+      display: inline-block;
+      height: 0.65rem;
+      margin-right: 0.35rem;
+      width: 0.65rem;
+    }
+
+    .dot-active { background: #27ae60; }
+    .dot-wait { background: #f39c12; }
+    .dot-off { background: #95a5a6; }
+
+    .empty-state {
+      border: 2px dashed #cbd8bf;
+      border-radius: 1.2rem;
+      color: #617064;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .toast-area {
+      position: fixed;
+      right: 1rem;
+      top: 1rem;
+      z-index: 1080;
+    }
+
+    @media (max-width: 767px) {
+      .hero { border-radius: 1.25rem; }
+      .display-5 { font-size: 2rem; }
+    }
   </style>
 </head>
 <body>
+  <div class="toast-area" id="toastArea"></div>
 
-<div class="container py-5">
-  <div class="text-center mb-5">
-    <h1 class="fw-bold">📊 Masterpiece Dashboard</h1>
-    <p class="text-secondary">Monitoring Data PM Tolandona</p>
-    
-    <div class="d-flex justify-content-center mt-3">
-      <select id="kategori" class="form-select w-25 shadow-sm" onchange="loadData()">
-        <option value="Siswa">Siswa</option>
-        <option value="Guru">Guru</option>
-        <option value="Posyandu">Posyandu</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="row g-4 mb-5 text-center">
-    <div class="col-md-4">
-      <div class="card stat-card bg-main p-4">
-        <h5>Total Data</h5>
-        <h2 id="txtTotal">0</h2>
+  <main class="container py-4 py-lg-5">
+    <section class="hero p-4 p-lg-5 mb-4">
+      <div class="row align-items-center g-4 position-relative" style="z-index: 1;">
+        <div class="col-lg-8">
+          <span class="badge badge-soft rounded-pill px-3 py-2 mb-3">Database Fullstack Google Sheets + Apps Script</span>
+          <h1 class="display-5 fw-black fw-bold mb-3">Dashboard Penerima Manfaat MBG & Relawan Tolandona</h1>
+          <p class="lead mb-0 text-white-50">Kelola pendataan penerima manfaat, status bantuan MBG, dan relawan dalam satu aplikasi web responsif dengan operasi tambah, edit, hapus, pencarian, dan rekap otomatis.</p>
+        </div>
+        <div class="col-lg-4">
+          <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-white-50">Status sinkronisasi</span>
+              <span class="badge bg-success">Online</span>
+            </div>
+            <h2 class="fw-bold mb-1" id="heroTotal">0</h2>
+            <p class="mb-0 text-white-50">total data tersimpan di database</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card stat-card bg-male p-4">
-        <h5>Laki-Laki (L)</h5>
-        <h2 id="txtL">0</h2>
+    </section>
+
+    <section class="row g-3 mb-4" id="statsGrid">
+      <div class="col-md-6 col-xl-3">
+        <div class="stat-card p-4 h-100">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p class="text-secondary mb-1">Penerima Manfaat</p>
+              <h2 class="fw-bold mb-0" id="totalPenerima">0</h2>
+            </div>
+            <span class="icon-pill">🍽️</span>
+          </div>
+          <small class="text-success fw-semibold" id="penerimaAktif">0 aktif</small>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card stat-card bg-female p-4">
-        <h5>Perempuan (P)</h5>
-        <h2 id="txtP">0</h2>
+      <div class="col-md-6 col-xl-3">
+        <div class="stat-card p-4 h-100">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p class="text-secondary mb-1">Relawan</p>
+              <h2 class="fw-bold mb-0" id="totalRelawan">0</h2>
+            </div>
+            <span class="icon-pill">🤝</span>
+          </div>
+          <small class="text-success fw-semibold" id="relawanAktif">0 aktif</small>
+        </div>
       </div>
-    </div>
-  </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="stat-card p-4 h-100">
+          <p class="text-secondary mb-2">Kategori Terbanyak</p>
+          <h4 class="fw-bold mb-1" id="topKategori">-</h4>
+          <small class="text-secondary">berdasarkan penerima MBG</small>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-3">
+        <div class="stat-card p-4 h-100">
+          <p class="text-secondary mb-2">Peran Relawan Utama</p>
+          <h4 class="fw-bold mb-1" id="topPeran">-</h4>
+          <small class="text-secondary">berdasarkan data relawan</small>
+        </div>
+      </div>
+    </section>
 
-  <div class="glass-container">
-    <h4 class="fw-bold mb-3">📋 Detail Data Transparan</h4>
-    <div class="table-responsive">
-      <table class="table table-custom">
-        <thead id="headTabel"></thead>
-        <tbody id="bodyTabel"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
+    <section class="row g-4 mb-4">
+      <div class="col-lg-6">
+        <div class="panel p-4 h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Komposisi Penerima</h5>
+            <span class="badge text-bg-light">Kategori</span>
+          </div>
+          <canvas id="chartPenerima" height="180"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="panel p-4 h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Komposisi Relawan</h5>
+            <span class="badge text-bg-light">Peran</span>
+          </div>
+          <canvas id="chartRelawan" height="180"></canvas>
+        </div>
+      </div>
+    </section>
 
-<script>
-  window.onload = loadData;
+    <section class="panel p-3 p-lg-4">
+      <ul class="nav nav-pills gap-2 mb-4" id="dataTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="penerima-tab" data-bs-toggle="pill" data-bs-target="#penerimaPanel" type="button" role="tab">Penerima MBG</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="relawan-tab" data-bs-toggle="pill" data-bs-target="#relawanPanel" type="button" role="tab">Relawan</button>
+        </li>
+      </ul>
 
-  function loadData() {
-    const kat = document.getElementById('kategori').value;
-    google.script.run.withSuccessHandler(showData).getDatabaseData(kat);
-  }
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="penerimaPanel" role="tabpanel" tabindex="0">
+          <div class="row g-4">
+            <div class="col-xl-4">
+              <h4 class="fw-bold" id="penerimaFormTitle">Tambah Penerima Manfaat</h4>
+              <p class="text-secondary">Input data penerima manfaat MBG dan status verifikasinya.</p>
+              <form id="penerimaForm" class="row g-3">
+                <input type="hidden" name="ID">
+                <div class="col-12"><label class="form-label">Nama Lengkap</label><input class="form-control" name="Nama" required></div>
+                <div class="col-12"><label class="form-label">NIK/NISN</label><input class="form-control" name="NIK/NISN" required></div>
+                <div class="col-md-6"><label class="form-label">Kategori</label><select class="form-select" name="Kategori" data-options="kategoriPenerima" required></select></div>
+                <div class="col-md-6"><label class="form-label">Jenis Kelamin</label><select class="form-select" name="Jenis Kelamin" data-options="gender" required></select></div>
+                <div class="col-md-6"><label class="form-label">Usia</label><input class="form-control" type="number" min="0" name="Usia"></div>
+                <div class="col-md-6"><label class="form-label">Status MBG</label><select class="form-select" name="Status MBG" data-options="statusMbg" required></select></div>
+                <div class="col-12"><label class="form-label">Alamat/Dusun</label><input class="form-control" name="Alamat/Dusun"></div>
+                <div class="col-12"><label class="form-label">Satuan Pendidikan/Instansi</label><input class="form-control" name="Satuan Pendidikan/Instansi"></div>
+                <div class="col-12"><label class="form-label">Catatan</label><textarea class="form-control" rows="3" name="Catatan"></textarea></div>
+                <div class="col-12 d-flex gap-2 flex-wrap">
+                  <button class="btn btn-primary px-4" type="submit">Simpan Data</button>
+                  <button class="btn btn-outline-secondary rounded-pill" type="button" onclick="resetForm('penerima')">Reset</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-xl-8">
+              <div class="d-flex flex-column flex-md-row gap-2 justify-content-between align-items-md-center mb-3">
+                <div><h4 class="fw-bold mb-1">Database Penerima</h4><p class="text-secondary mb-0">Cari, edit, atau hapus data penerima manfaat.</p></div>
+                <input class="form-control w-md-50" id="searchPenerima" placeholder="Cari nama, NIK/NISN, kategori, alamat..." oninput="renderTables()">
+              </div>
+              <div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>Nama</th><th>Kategori</th><th>JK</th><th>Status</th><th>Alamat</th><th>Aksi</th></tr></thead><tbody id="penerimaRows"></tbody></table></div>
+              <div class="empty-state d-none" id="emptyPenerima">Belum ada data penerima manfaat.</div>
+            </div>
+          </div>
+        </div>
 
-  function showData(res) {
-    document.getElementById('txtTotal').innerText = res.total;
-    document.getElementById('txtL').innerText = res.male;
-    document.getElementById('txtP').innerText = res.female;
+        <div class="tab-pane fade" id="relawanPanel" role="tabpanel" tabindex="0">
+          <div class="row g-4">
+            <div class="col-xl-4">
+              <h4 class="fw-bold" id="relawanFormTitle">Tambah Relawan</h4>
+              <p class="text-secondary">Kelola profil, peran, dan wilayah tugas relawan MBG.</p>
+              <form id="relawanForm" class="row g-3">
+                <input type="hidden" name="ID">
+                <div class="col-12"><label class="form-label">Nama Lengkap</label><input class="form-control" name="Nama" required></div>
+                <div class="col-12"><label class="form-label">NIK</label><input class="form-control" name="NIK"></div>
+                <div class="col-12"><label class="form-label">Nomor HP</label><input class="form-control" name="Nomor HP"></div>
+                <div class="col-md-6"><label class="form-label">Jenis Kelamin</label><select class="form-select" name="Jenis Kelamin" data-options="gender" required></select></div>
+                <div class="col-md-6"><label class="form-label">Peran</label><select class="form-select" name="Peran" data-options="peranRelawan" required></select></div>
+                <div class="col-md-6"><label class="form-label">Wilayah Tugas</label><input class="form-control" name="Wilayah Tugas"></div>
+                <div class="col-md-6"><label class="form-label">Status</label><select class="form-select" name="Status" data-options="statusRelawan" required></select></div>
+                <div class="col-12"><label class="form-label">Catatan</label><textarea class="form-control" rows="3" name="Catatan"></textarea></div>
+                <div class="col-12 d-flex gap-2 flex-wrap">
+                  <button class="btn btn-primary px-4" type="submit">Simpan Data</button>
+                  <button class="btn btn-outline-secondary rounded-pill" type="button" onclick="resetForm('relawan')">Reset</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-xl-8">
+              <div class="d-flex flex-column flex-md-row gap-2 justify-content-between align-items-md-center mb-3">
+                <div><h4 class="fw-bold mb-1">Database Relawan</h4><p class="text-secondary mb-0">Cari, edit, atau hapus data relawan.</p></div>
+                <input class="form-control w-md-50" id="searchRelawan" placeholder="Cari nama, HP, peran, wilayah..." oninput="renderTables()">
+              </div>
+              <div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>Nama</th><th>HP</th><th>Peran</th><th>Wilayah</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="relawanRows"></tbody></table></div>
+              <div class="empty-state d-none" id="emptyRelawan">Belum ada data relawan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    // Isi Header Tabel
-    const head = document.getElementById('headTabel');
-    head.innerHTML = `<tr>${res.headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const state = {
+      penerima: [],
+      relawan: [],
+      summary: {},
+      options: {},
+      charts: {}
+    };
 
-    // Isi Body Tabel
-    const body = document.getElementById('bodyTabel');
-    body.innerHTML = res.rows.map(row => {
-      return `<tr>${row.map((cell, i) => {
-        let cls = i === 0 ? 'first-td' : (i === row.length-1 ? 'last-td' : '');
-        return `<td class="${cls}">${cell}</td>`;
-      }).join('')}</tr>`;
-    }).join('');
-  }
-</script>
+    const demoData = {
+      penerima: [
+        {'ID':'PM-DEMO-1','Nama':'Aulia Rahma','NIK/NISN':'7401xxxx001','Kategori':'Siswa','Jenis Kelamin':'Perempuan','Usia':11,'Alamat/Dusun':'Dusun 1','Satuan Pendidikan/Instansi':'SDN Tolandona','Status MBG':'Aktif','Catatan':'Demo lokal'},
+        {'ID':'PM-DEMO-2','Nama':'Muh. Farhan','NIK/NISN':'7401xxxx002','Kategori':'Balita','Jenis Kelamin':'Laki-laki','Usia':4,'Alamat/Dusun':'Dusun 2','Satuan Pendidikan/Instansi':'Posyandu Melati','Status MBG':'Menunggu Verifikasi','Catatan':'Demo lokal'}
+      ],
+      relawan: [
+        {'ID':'RLW-DEMO-1','Nama':'Siti Aminah','NIK':'7401xxxx101','Nomor HP':'081234567890','Jenis Kelamin':'Perempuan','Peran':'Distribusi','Wilayah Tugas':'Tolandona Barat','Status':'Aktif','Catatan':'Demo lokal'},
+        {'ID':'RLW-DEMO-2','Nama':'La Ode Rahman','NIK':'7401xxxx102','Nomor HP':'081298765432','Jenis Kelamin':'Laki-laki','Peran':'Dapur','Wilayah Tugas':'Tolandona Timur','Status':'Siaga','Catatan':'Demo lokal'}
+      ],
+      options: {
+        kategoriPenerima: ['Siswa','Santri','Balita','Ibu Hamil','Ibu Menyusui','Lansia','Disabilitas','Lainnya'],
+        statusMbg: ['Aktif','Menunggu Verifikasi','Tidak Aktif'],
+        gender: ['Laki-laki','Perempuan'],
+        peranRelawan: ['Koordinator','Dapur','Distribusi','Pendataan','Kesehatan','Logistik'],
+        statusRelawan: ['Aktif','Siaga','Tidak Aktif']
+      }
+    };
 
+    document.addEventListener('DOMContentLoaded', () => {
+      bindForms();
+      loadData();
+    });
+
+    function loadData() {
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(applyData)
+          .withFailureHandler(error => showToast(error.message || error, 'danger'))
+          .getAppData();
+      } else {
+        const localSummary = calculateSummary(demoData.penerima, demoData.relawan);
+        applyData({...demoData, summary: localSummary});
+        showToast('Mode pratinjau lokal: hubungkan ke Google Apps Script untuk database live.', 'warning');
+      }
+    }
+
+    function applyData(data) {
+      state.penerima = data.penerima || [];
+      state.relawan = data.relawan || [];
+      state.summary = data.summary || calculateSummary(state.penerima, state.relawan);
+      state.options = data.options || demoData.options;
+
+      populateOptions();
+      renderStats();
+      renderCharts();
+      renderTables();
+    }
+
+    function populateOptions() {
+      document.querySelectorAll('select[data-options]').forEach(select => {
+        const key = select.dataset.options;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Pilih...</option>' + (state.options[key] || []).map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join('');
+        if (currentValue) select.value = currentValue;
+      });
+    }
+
+    function bindForms() {
+      document.getElementById('penerimaForm').addEventListener('submit', event => handleSubmit(event, 'penerima'));
+      document.getElementById('relawanForm').addEventListener('submit', event => handleSubmit(event, 'relawan'));
+    }
+
+    function handleSubmit(event, type) {
+      event.preventDefault();
+      const form = event.target;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      const button = form.querySelector('button[type="submit"]');
+      setButtonLoading(button, true);
+
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(response => {
+            setButtonLoading(button, false);
+            showToast(response.message, 'success');
+            resetForm(type);
+            applyData(response.data);
+          })
+          .withFailureHandler(error => {
+            setButtonLoading(button, false);
+            showToast(error.message || error, 'danger');
+          })
+          .saveRecord(type, payload);
+      } else {
+        saveLocal(type, payload);
+        setButtonLoading(button, false);
+        resetForm(type);
+      }
+    }
+
+    function saveLocal(type, payload) {
+      const rows = state[type];
+      const idPrefix = type === 'penerima' ? 'PM' : 'RLW';
+      const id = payload.ID || `${idPrefix}-LOCAL-${Date.now()}`;
+      const record = {...payload, ID: id};
+      const index = rows.findIndex(item => item.ID === id);
+
+      if (index >= 0) rows[index] = record;
+      else rows.unshift(record);
+
+      state.summary = calculateSummary(state.penerima, state.relawan);
+      renderStats();
+      renderCharts();
+      renderTables();
+      showToast('Data tersimpan di mode pratinjau lokal.', 'success');
+    }
+
+    function editRecord(type, id) {
+      const item = state[type].find(row => row.ID === id);
+      if (!item) return;
+
+      const form = document.getElementById(`${type}Form`);
+      Object.keys(item).forEach(key => {
+        const field = form.elements[key];
+        if (field) field.value = item[key];
+      });
+
+      document.getElementById(`${type}FormTitle`).textContent = type === 'penerima' ? 'Edit Penerima Manfaat' : 'Edit Relawan';
+      form.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+
+    function deleteRecord(type, id) {
+      if (!confirm('Hapus data ini dari database?')) return;
+
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(response => {
+            showToast(response.message, 'success');
+            applyData(response.data);
+          })
+          .withFailureHandler(error => showToast(error.message || error, 'danger'))
+          .deleteRecord(type, id);
+      } else {
+        state[type] = state[type].filter(row => row.ID !== id);
+        state.summary = calculateSummary(state.penerima, state.relawan);
+        renderStats();
+        renderCharts();
+        renderTables();
+        showToast('Data dihapus dari mode pratinjau lokal.', 'success');
+      }
+    }
+
+    function resetForm(type) {
+      document.getElementById(`${type}Form`).reset();
+      document.getElementById(`${type}FormTitle`).textContent = type === 'penerima' ? 'Tambah Penerima Manfaat' : 'Tambah Relawan';
+    }
+
+    function renderStats() {
+      const summary = state.summary;
+      setText('totalPenerima', summary.totalPenerima || 0);
+      setText('totalRelawan', summary.totalRelawan || 0);
+      setText('penerimaAktif', `${summary.penerimaAktif || 0} aktif`);
+      setText('relawanAktif', `${summary.relawanAktif || 0} aktif`);
+      setText('heroTotal', (summary.totalPenerima || 0) + (summary.totalRelawan || 0));
+      setText('topKategori', topLabel(summary.penerimaByKategori));
+      setText('topPeran', topLabel(summary.relawanByPeran));
+    }
+
+    function renderCharts() {
+      drawDoughnut('chartPenerima', state.summary.penerimaByKategori || {}, ['#12372a', '#436850', '#adbc9f', '#f9b572', '#6c5ce7', '#00b894']);
+      drawDoughnut('chartRelawan', state.summary.relawanByPeran || {}, ['#436850', '#f9b572', '#0984e3', '#6c5ce7', '#00b894', '#d63031']);
+    }
+
+    function drawDoughnut(canvasId, dataMap, colors) {
+      const context = document.getElementById(canvasId);
+      const labels = Object.keys(dataMap);
+      const data = Object.values(dataMap);
+
+      if (state.charts[canvasId]) state.charts[canvasId].destroy();
+
+      state.charts[canvasId] = new Chart(context, {
+        type: 'doughnut',
+        data: {
+          labels: labels.length ? labels : ['Belum ada data'],
+          datasets: [{ data: data.length ? data : [1], backgroundColor: labels.length ? colors : ['#dfe6e9'], borderWidth: 0 }]
+        },
+        options: {
+          cutout: '68%',
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
+
+    function renderTables() {
+      renderPenerimaTable();
+      renderRelawanTable();
+    }
+
+    function renderPenerimaTable() {
+      const keyword = document.getElementById('searchPenerima').value.toLowerCase();
+      const rows = filterRows(state.penerima, keyword);
+      const body = document.getElementById('penerimaRows');
+      document.getElementById('emptyPenerima').classList.toggle('d-none', rows.length > 0);
+      body.innerHTML = rows.map(row => `
+        <tr>
+          <td><strong>${escapeHtml(row.Nama)}</strong><br><small class="text-secondary">${escapeHtml(row['NIK/NISN'])}</small></td>
+          <td>${escapeHtml(row.Kategori)}</td>
+          <td>${escapeHtml(row['Jenis Kelamin'])}</td>
+          <td>${statusBadge(row['Status MBG'])}</td>
+          <td>${escapeHtml(row['Alamat/Dusun'])}</td>
+          <td>${actionButtons('penerima', row.ID)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderRelawanTable() {
+      const keyword = document.getElementById('searchRelawan').value.toLowerCase();
+      const rows = filterRows(state.relawan, keyword);
+      const body = document.getElementById('relawanRows');
+      document.getElementById('emptyRelawan').classList.toggle('d-none', rows.length > 0);
+      body.innerHTML = rows.map(row => `
+        <tr>
+          <td><strong>${escapeHtml(row.Nama)}</strong><br><small class="text-secondary">${escapeHtml(row.NIK)}</small></td>
+          <td>${escapeHtml(row['Nomor HP'])}</td>
+          <td>${escapeHtml(row.Peran)}</td>
+          <td>${escapeHtml(row['Wilayah Tugas'])}</td>
+          <td>${statusBadge(row.Status)}</td>
+          <td>${actionButtons('relawan', row.ID)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterRows(rows, keyword) {
+      if (!keyword) return rows;
+      return rows.filter(row => Object.values(row).join(' ').toLowerCase().includes(keyword));
+    }
+
+    function actionButtons(type, id) {
+      return `
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-primary" type="button" onclick="editRecord('${type}', '${escapeAttribute(id)}')">Edit</button>
+          <button class="btn btn-outline-danger" type="button" onclick="deleteRecord('${type}', '${escapeAttribute(id)}')">Hapus</button>
+        </div>
+      `;
+    }
+
+    function statusBadge(status) {
+      const normalized = String(status || '').toLowerCase();
+      const dotClass = normalized.includes('aktif') && !normalized.includes('tidak') ? 'dot-active' : normalized.includes('tunggu') || normalized.includes('siaga') ? 'dot-wait' : 'dot-off';
+      return `<span class="badge rounded-pill text-bg-light"><span class="status-dot ${dotClass}"></span>${escapeHtml(status || 'Belum diisi')}</span>`;
+    }
+
+    function calculateSummary(penerima, relawan) {
+      return {
+        totalPenerima: penerima.length,
+        totalRelawan: relawan.length,
+        penerimaAktif: penerima.filter(row => row['Status MBG'] === 'Aktif').length,
+        relawanAktif: relawan.filter(row => row.Status === 'Aktif').length,
+        penerimaByKategori: groupCount(penerima, 'Kategori'),
+        penerimaByGender: groupCount(penerima, 'Jenis Kelamin'),
+        relawanByPeran: groupCount(relawan, 'Peran'),
+        relawanByStatus: groupCount(relawan, 'Status')
+      };
+    }
+
+    function groupCount(rows, key) {
+      return rows.reduce((accumulator, row) => {
+        const label = row[key] || 'Belum diisi';
+        accumulator[label] = (accumulator[label] || 0) + 1;
+        return accumulator;
+      }, {});
+    }
+
+    function topLabel(dataMap) {
+      const entries = Object.entries(dataMap || {});
+      if (!entries.length) return '-';
+      const [label, total] = entries.sort((a, b) => b[1] - a[1])[0];
+      return `${label} (${total})`;
+    }
+
+    function setText(id, value) {
+      document.getElementById(id).textContent = value;
+    }
+
+    function setButtonLoading(button, loading) {
+      button.disabled = loading;
+      button.textContent = loading ? 'Menyimpan...' : 'Simpan Data';
+    }
+
+    function showToast(message, type) {
+      const toastId = `toast-${Date.now()}`;
+      const area = document.getElementById('toastArea');
+      area.insertAdjacentHTML('beforeend', `
+        <div id="${toastId}" class="toast align-items-center text-bg-${type || 'primary'} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">${escapeHtml(message)}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      `);
+      const element = document.getElementById(toastId);
+      const toast = new bootstrap.Toast(element, {delay: 4000});
+      toast.show();
+      element.addEventListener('hidden.bs.toast', () => element.remove());
+    }
+
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value).replace(/`/g, '&#96;');
+    }
+  </script>
 </body>
 </html>
